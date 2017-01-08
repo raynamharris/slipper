@@ -1,0 +1,32 @@
+---
+title: "Slipper.Rmd"
+author: "Rayna M Harris"
+date: 
+output: 
+  html_document:
+  keep_md: yes
+#output:
+#  md_document:
+#    variant: markdown_github
+---
+
+An Rmd version of the Slipper tutorial found here: https://github.com/jtleek/slipper
+
+```{r}
+library(devtools)
+#devtools::install_github('jtleek/slipper')
+library(slipper)
+slipper(mtcars,mean(mpg),B=12)
+mtcars %>% slipper(mean(mpg),B=12)
+mtcars %>% slipper(mean(mpg),B=12) %>%
+  filter(type=="bootstrap") %>% 
+  summarize(ci_low = quantile(value,0.025),
+            ci_high = quantile(value,0.975))
+slipper_lm(mtcars,mpg ~ cyl,B=8)
+mtcars %>% slipper_lm(mpg ~ cyl,B=8)
+mtcars %>% slipper_lm(mpg ~ cyl,B=8,boot_resid=TRUE)
+mtcars %>% slipper_lm(mpg ~ cyl,B=8) %>% 
+  filter(type=="bootstrap",term=="cyl") %>%
+  summarize(ci_low = quantile(value,0.025),
+            ci_high = quantile(value,0.975))
+```
